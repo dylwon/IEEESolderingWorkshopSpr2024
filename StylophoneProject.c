@@ -36,8 +36,27 @@
 #define VOLT_B4 11
 #define VOLT_C5 12
 
-unsigned int Frequency(int voltage, unsigned int volt_scale[13], unsigned int frequency_scale[13], int pitchShift) {
+void setup() {
+  Serial.begin(9600); // Set baud rate for debugging
   
+  // [Initializing Pins as Inputs/Outputs]
+  
+  // PA1 is the analog input from the resistor ladder
+  // PA2 is the analog input from the Pitch Control potentiometer
+  // PA3 is the analog input from the Volume Control potentiometer
+  DDRA &= (~PIN1 | ~PIN2 | ~PIN3);
+  
+  // PA6 is the PWM output for the buzzer
+  // PA7 is the output to power the indication LED 
+  DDRA |= (PIN6 | PIN7);  
+
+  // [Setting the Input/Output Values]
+
+  // Sets the bit at PA7 to be 0 to turn the LED on.
+  PORTA &= (~PIN7);
+}
+
+unsigned int Frequency(int voltage, unsigned int volt_scale[13], unsigned int frequency_scale[13], int pitchShift) {
   float lowestError = 500.0, error;
   int index = 0;
 
@@ -58,26 +77,6 @@ unsigned int Frequency(int voltage, unsigned int volt_scale[13], unsigned int fr
     return 0; 
   else 
     return frequency_scale[index] + ((pitchShift/(float)MAX_VOLT) * frequency_scale[index]);
-}
-
-void setup() {
-  Serial.begin(9600); // Set baud rate for debugging
-  
-  // [Initializing Pins as Inputs/Outputs]
-  
-  // PA1 is the analog input from the resistor ladder
-  // PA2 is the analog input from the Pitch Control potentiometer
-  // PA3 is the analog input from the Volume Control potentiometer
-  DDRA &= (~PIN1 | ~PIN2 | ~PIN3);
-  
-  // PA6 is the PWM output for the buzzer
-  // PA7 is the output to power the indication LED 
-  DDRA |= (PIN6 | PIN7);  
-
-  // [Setting the Input/Output Values]
-
-  // Sets the bit at PA7 to be 0 to turn the LED on.
-  PORTA &= (~PIN7);
 }
 
 void loop() {
