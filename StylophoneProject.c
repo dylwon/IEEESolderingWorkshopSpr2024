@@ -7,7 +7,7 @@
 #define CUTOFF_VOLT 1000
 
 // Frequency values for each note
-#include "pitches.h"
+//#include "pitches.h"
 
 #define NOTE_C4  100
 #define NOTE_CS4 100
